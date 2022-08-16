@@ -7,6 +7,11 @@ public class AppException extends RuntimeException {
         this.statusCode = statusCode;
     }
 
+    public AppException(int statusCode, Throwable cause) {
+        super(cause);
+        this.statusCode = statusCode;
+    }
+
     public int getStatusCode() {
         return statusCode;
     }

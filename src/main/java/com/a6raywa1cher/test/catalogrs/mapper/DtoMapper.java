@@ -15,19 +15,23 @@ import static org.mapstruct.NullValuePropertyMappingStrategy.IGNORE;
 @Mapper(uses = MapperHelper.class, componentModel = "spring")
 public interface DtoMapper {
     @Mapping(target = "category", source = "category.id")
+    @Mapping(target = "createdAt", qualifiedByName = {"MapperHelper", "FromLocalDateTime"})
     ProductDto map(Product product);
 
     @Mapping(target = "category", source = "category.id")
+    @Mapping(target = "createdAt", qualifiedByName = {"MapperHelper", "FromLocalDateTime"})
     ShortProductDto mapToShort(Product product);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "imageUrl", ignore = true)
+    @Mapping(target = "category", ignore = true)
     void copyAll(ProductDto dto, @MappingTarget Product product);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "imageUrl", ignore = true)
+    @Mapping(target = "category", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = IGNORE)
     void copyNotNull(ProductDto dto, @MappingTarget Product product);
 
