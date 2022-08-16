@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5544/compose-postgres
+    username: compose-postgres
+    password: compose-postgres
+  jpa:
+    hibernate:
+      ddl-auto: update

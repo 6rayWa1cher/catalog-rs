@@ -1,0 +1,60 @@
+version: "3.3"
+
+services:
+  catalog_rs_app:
+    build:
+      context: .
+    networks:
+      - private_network
+    depends_on:
+      - catalog_rs_db
+      - catalog_rs_minio
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://catalog_rs_db:5432/compose-postgres
+      - SPRING_DATASOURCE_USERNAME=compose-postgres
+      - SPRING_DATASOURCE_PASSWORD=compose-postgres
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_PROFILES_ACTIVE=${PROFILE:-prod}
+      - WEB_CORS_ALLOWED_ORIGINS=${ORIGINS:-[]}
+    ports:
+      - '${PORT:-8080}:8080'
+    profiles:
+      - backend
+
+  catalog_rs_db:
+    image: "postgres:14.5-alpine"
+    ports:
+      - '5544:5432'
+    networks:
+      - private_network
+    environment:
+      - POSTGRES_USER=compose-postgres
+      - POSTGRES_PASSWORD=compose-postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+    profiles:
+      - infra
+
+  catalog_rs_minio:
+    image: 'bitnami/minio:latest'
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+    environment:
+      - MINIO_ROOT_USER=minio-root-user
+      - MINIO_ROOT_PASSWORD=minio-root-password
+      - MINIO_DEFAULT_BUCKETS=catalog-rs-bucket:public
+    volumes:
+      - miniodata:/data
+    networks:
+      - private_network
+    profiles:
+      - infra
+
+networks:
+  private_network:
+
+volumes:
+  pgdata:
+  miniodata:
