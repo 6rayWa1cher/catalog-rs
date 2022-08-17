@@ -7,6 +7,7 @@ import com.a6raywa1cher.test.catalogrs.exception.EntityNotFoundAppException;
 import com.a6raywa1cher.test.catalogrs.exception.UniqueConstraintViolationAppException;
 import com.a6raywa1cher.test.catalogrs.mapper.DtoMapper;
 import com.a6raywa1cher.test.catalogrs.service.ProductCategoryService;
+import com.a6raywa1cher.test.catalogrs.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,12 +24,14 @@ import java.util.Objects;
 public class ProductCategoryServiceImpl implements ProductCategoryService {
     private final ProductCategoryRepository repository;
     private final DtoMapper mapper;
+    private final ProductService productService;
 
     @Autowired
     public ProductCategoryServiceImpl(ProductCategoryRepository repository,
-                                      DtoMapper mapper) {
+                                      DtoMapper mapper, ProductService productService) {
         this.repository = repository;
         this.mapper = mapper;
+        this.productService = productService;
     }
 
     @Override
@@ -90,6 +93,7 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
         repository.findById(id)
                 .ifPresent((pc) -> {
                     // TODO: invoke delete for all Products
+                    pc.getProducts().forEach(p -> productService.delete(p.getId()));
                     repository.delete(pc);
                 });
     }
