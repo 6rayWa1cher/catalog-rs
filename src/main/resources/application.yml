@@ -11,6 +11,10 @@ spring:
     multipart:
       max-file-size: 4MB
       max-request-size: 4MB
+  mvc:
+    view:
+      prefix: /WEB-INF/jsp/
+      suffix: .jsp
 storage:
   minio:
     endpoint: http://localhost:9000

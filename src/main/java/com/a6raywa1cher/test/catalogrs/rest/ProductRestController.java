@@ -22,13 +22,13 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 @RestController
-@RequestMapping("/product")
-public class ProductController {
+@RequestMapping("/api/product")
+public class ProductRestController {
     private final ProductService service;
     private final RestDtoMapper mapper;
 
     @Autowired
-    public ProductController(ProductService service, RestDtoMapper mapper) {
+    public ProductRestController(ProductService service, RestDtoMapper mapper) {
         this.service = service;
         this.mapper = mapper;
     }

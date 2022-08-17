@@ -16,13 +16,13 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/product/category")
-public class ProductCategoryController {
+@RequestMapping("/api/product/category")
+public class ProductCategoryRestController {
     private final ProductCategoryService service;
     private final RestDtoMapper mapper;
 
     @Autowired
-    public ProductCategoryController(ProductCategoryService service, RestDtoMapper mapper) {
+    public ProductCategoryRestController(ProductCategoryService service, RestDtoMapper mapper) {
         this.service = service;
         this.mapper = mapper;
     }
