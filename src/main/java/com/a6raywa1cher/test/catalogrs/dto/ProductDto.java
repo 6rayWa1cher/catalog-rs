@@ -5,7 +5,6 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
-import java.util.Currency;
 
 @Data
 public class ProductDto {
@@ -14,8 +13,6 @@ public class ProductDto {
     private String title;
 
     private String description;
-
-    private Currency priceCurrency;
 
     private BigDecimal priceAmount;
 

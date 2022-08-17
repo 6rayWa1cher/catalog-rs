@@ -5,15 +5,12 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
-import java.util.Currency;
 
 @Data
 public class ShortProductDto {
     private Long id;
 
     private String title;
-
-    private Currency priceCurrency;
 
     private BigDecimal priceAmount;
 

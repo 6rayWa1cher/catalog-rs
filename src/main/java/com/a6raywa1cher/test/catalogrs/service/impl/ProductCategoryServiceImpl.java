@@ -30,11 +30,12 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     }
 
     @Override
-    public ProductCategoryDto getById(long id) {
+    public ProductCategoryDto getById(Long id) {
         return mapper.map(getEntityById(id));
     }
 
-    private ProductCategory getEntityById(long id) {
+    private ProductCategory getEntityById(Long id) {
+        Objects.requireNonNull(id, "id must be not null");
         return repository.findById(id).orElseThrow(() -> new EntityNotFoundAppException(id, ProductCategory.class));
     }
 
@@ -57,7 +58,7 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     }
 
     @Override
-    public ProductCategoryDto edit(long id, ProductCategoryDto dto) {
+    public ProductCategoryDto edit(Long id, ProductCategoryDto dto) {
         ProductCategory productCategory = getEntityById(id);
 
         assertProductCategoryTitleAvailable(productCategory.getTitle(), dto.getTitle());
@@ -70,7 +71,7 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     }
 
     @Override
-    public ProductCategoryDto patch(long id, ProductCategoryDto dto) {
+    public ProductCategoryDto patch(Long id, ProductCategoryDto dto) {
         ProductCategory productCategory = getEntityById(id);
 
         assertProductCategoryTitleAvailable(productCategory.getTitle(), dto.getTitle());
@@ -83,7 +84,7 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     }
 
     @Override
-    public void delete(long id) {
+    public void delete(Long id) {
         repository.findById(id)
                 .ifPresent((pc) -> {
                     // TODO: invoke delete for all Products

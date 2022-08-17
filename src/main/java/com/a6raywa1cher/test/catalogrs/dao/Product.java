@@ -1,12 +1,14 @@
 package com.a6raywa1cher.test.catalogrs.dao;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Currency;
 import java.util.Objects;
 
 @Getter
@@ -26,9 +28,6 @@ public class Product {
 
     @Column(name = "description", columnDefinition="TEXT")
     private String description;
-
-    @Column(name = "price_currency")
-    private Currency priceCurrency;
 
     @Column(name = "price_amount")
     private BigDecimal priceAmount;
