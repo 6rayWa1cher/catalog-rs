@@ -9,7 +9,7 @@ public class FileStorageConfig {
     @Bean
     public MinioClient minioClient(MinioStorageConfigProperties properties) {
         return MinioClient.builder()
-                .endpoint(properties.getUrl())
+                .endpoint(properties.getEndpoint())
                 .credentials(properties.getAccessKey(), properties.getSecretKey())
                 .build();
     }

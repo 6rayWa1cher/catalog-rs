@@ -16,10 +16,12 @@ import static org.mapstruct.NullValuePropertyMappingStrategy.IGNORE;
 public interface DtoMapper {
     @Mapping(target = "category", source = "category.id")
     @Mapping(target = "createdAt", qualifiedByName = {"MapperHelper", "FromLocalDateTime"})
+    @Mapping(target = "imageUrl", qualifiedByName = {"MapperHelper", "ToPublicUrl"})
     ProductDto map(Product product);
 
     @Mapping(target = "category", source = "category.id")
     @Mapping(target = "createdAt", qualifiedByName = {"MapperHelper", "FromLocalDateTime"})
+    @Mapping(target = "imageUrl", qualifiedByName = {"MapperHelper", "ToPublicUrl"})
     ShortProductDto mapToShort(Product product);
 
     @Mapping(target = "id", ignore = true)

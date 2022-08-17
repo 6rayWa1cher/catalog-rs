@@ -17,6 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -98,14 +99,7 @@ public class ProductServiceImpl implements ProductService {
     public void delete(Long id) {
         repository.findById(id)
                 .ifPresent((product) -> {
-                    String imageUrl = product.getImageUrl();
-                    if (imageUrl != null) {
-                        try {
-                            fileStorage.delete(imageUrl);
-                        } catch (Exception e) {
-                            log.error("Exception during Product{id=%d} deletion".formatted(product.getId()), e);
-                        }
-                    }
+                    deleteImageFromProduct(product);
                     removeProductFromCategory(product);
                     repository.delete(product);
                 });
@@ -122,22 +116,60 @@ public class ProductServiceImpl implements ProductService {
     }
 
     private void upsertProductIntoCategory(Product product, ProductCategory category) {
-        ProductCategory prevCategory = product.getCategory();
-        if (prevCategory != null && !prevCategory.equals(category)) {
-            removeProductFromCategory(product);
-        }
+        removeProductFromCategory(product);
         product.setCategory(category);
         category.getProducts().add(product);
     }
 
     private void removeProductFromCategory(Product product) {
+        if (product.getCategory() == null) return;
         product.getCategory().getProducts().remove(product);
         product.setCategory(null);
     }
 
+    private void deleteImageFromProduct(Product product) {
+        String imageUrl = product.getImageUrl();
+        if (imageUrl == null) return;
+        deleteImageFromProduct(product, imageUrl);
+        product.setImageUrl(null);
+    }
+
+    private void deleteImageFromProduct(Product product, String imageUrl) {
+        if (imageUrl == null) return;
+        try {
+            fileStorage.delete(imageUrl);
+        } catch (Exception e) {
+            log.error(
+                    "Exception during delete of image from Product{id=%d,imageUrl=%s}"
+                            .formatted(product.getId(), imageUrl), e
+            );
+        }
+    }
+
     @Override
-    @SuppressWarnings("unchecked")
     public Page<ShortProductDto> getPageByFilter(ProductQueryDto dto, Pageable pageable) {
         return repository.getFilteredPage(dto, pageable).map(mapper::mapToShort);
+    }
+
+    @Override
+    public ProductDto uploadImage(Long id, MultipartFile file) {
+        Product product = getEntityById(id);
+
+        String prevImageUrl = product.getImageUrl();
+
+        String imageUrl = fileStorage.upload(file, "image");
+        product.setImageUrl(imageUrl);
+
+        Product saved;
+        try {
+            saved = repository.saveAndFlush(product);
+        } catch (Exception e) {
+            deleteImageFromProduct(product, imageUrl);
+            throw e;
+        }
+
+        deleteImageFromProduct(product, prevImageUrl); // delete prev file only when other steps completed successfully
+
+        return mapper.map(saved);
     }
 }

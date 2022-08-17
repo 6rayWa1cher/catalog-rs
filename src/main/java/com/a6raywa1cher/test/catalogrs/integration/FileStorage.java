@@ -6,4 +6,6 @@ public interface FileStorage {
     String upload(MultipartFile multipartFile, String folder);
 
     void delete(String id);
+
+    String getPublicUrl(String id);
 }

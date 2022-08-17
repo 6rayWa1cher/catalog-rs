@@ -16,6 +16,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 @RestController
 @RequestMapping("/product")
@@ -66,5 +70,10 @@ public class ProductController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable long id) {
         service.delete(id);
+    }
+
+    @PostMapping(value = "/{id}/upload-image", consumes = {"multipart/form-data"})
+    public ProductDto uploadImage(@PathVariable long id, @RequestParam("file") @Valid @NotNull MultipartFile file) {
+        return service.uploadImage(id, file);
     }
 }
