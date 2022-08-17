@@ -16,12 +16,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Service
 @Slf4j
+@Transactional
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository repository;
     private final ProductCategoryRepository categoryRepository;
@@ -63,7 +65,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDto edit(Long id, ProductDto dto) {
+    public ProductDto update(Long id, ProductDto dto) {
         Product product = getEntityById(id);
         ProductCategory category = getCategoryById(dto.getCategory());
 

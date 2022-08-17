@@ -8,9 +8,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
+import java.util.Random;
 import java.util.UUID;
 
 @Component
@@ -18,11 +20,13 @@ import java.util.UUID;
 public class MinioFileStorage implements FileStorage {
     private final MinioClient minioClient;
     private final String bucketName;
+    private final Random random; // Instances of java.util.Random are threadsafe since Java 7
 
     @Autowired
-    public MinioFileStorage(MinioClient minioClient, @Value("${storage.minio.bucket}") String bucketName) {
+    public MinioFileStorage(MinioClient minioClient, @Value("${storage.minio.bucket}") String bucketName, @Value("#{new java.util.Random()}") Random random) {
         this.minioClient = minioClient;
         this.bucketName = bucketName;
+        this.random = random;
     }
 
     @EventListener(ApplicationReadyEvent.class)
@@ -44,9 +48,11 @@ public class MinioFileStorage implements FileStorage {
         try {
             long fileSize = multipartFile.getSize();
             InputStream inputStream = multipartFile.getInputStream();
+            String suggestedFileName = multipartFile.getName();
+            String filePath = generatePath(folder, suggestedFileName);
             ObjectWriteResponse response = minioClient.putObject(PutObjectArgs.builder()
                     .bucket(bucketName)
-                    .object(folder + "/" + UUID.randomUUID())
+                    .object(filePath)
                     .contentType(multipartFile.getContentType())
                     .stream(inputStream, fileSize, -1)
                     .build());
@@ -54,6 +60,16 @@ public class MinioFileStorage implements FileStorage {
         } catch (Exception e) {
             throw new FileStorageOperationException("upload", e);
         }
+    }
+
+    private String generatePath(String folder, String suggestedFileName) {
+        int randomByte = random.nextInt(0xFF + 1); // we want two symbols for a subfolder name
+        String subfolder = Integer.toHexString(randomByte);
+
+        String extension = StringUtils.getFilenameExtension(suggestedFileName);
+        String fileName = UUID.randomUUID() + (extension == null ? "" : "." + extension);
+
+        return String.join("/", folder, subfolder, fileName);
     }
 
     @Override

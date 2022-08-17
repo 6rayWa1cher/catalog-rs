@@ -10,7 +10,7 @@ public interface CrudService<D, I> {
 
     D create(D dto);
 
-    D edit(I id, D dto);
+    D update(I id, D dto);
 
     D patch(I id, D dto);
 

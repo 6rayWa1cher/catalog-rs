@@ -12,12 +12,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 import java.util.Objects;
 
 @Service
 @Slf4j
+@Transactional
 public class ProductCategoryServiceImpl implements ProductCategoryService {
     private final ProductCategoryRepository repository;
     private final DtoMapper mapper;
@@ -58,7 +60,7 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     }
 
     @Override
-    public ProductCategoryDto edit(Long id, ProductCategoryDto dto) {
+    public ProductCategoryDto update(Long id, ProductCategoryDto dto) {
         ProductCategory productCategory = getEntityById(id);
 
         assertProductCategoryTitleAvailable(productCategory.getTitle(), dto.getTitle());
