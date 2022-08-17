@@ -1,6 +1,7 @@
 package com.a6raywa1cher.test.catalogrs.dao.repo;
 
 import com.a6raywa1cher.test.catalogrs.dao.Product;
+import com.a6raywa1cher.test.catalogrs.dao.Product_;
 import com.a6raywa1cher.test.catalogrs.dto.ProductQueryDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -12,6 +13,7 @@ import javax.persistence.criteria.Predicate;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @Component
 public class ProductRepositoryImpl {
@@ -28,20 +30,20 @@ public class ProductRepositoryImpl {
             List<Predicate> predicates = new ArrayList<>();
             String title = queryDto.getTitle();
             if (title != null) {
-                String pattern = "%" + title + "%";
-                predicates.add(builder.like(builder.lower(root.get("title")), pattern));
+                String pattern = "%" + title.toLowerCase(Locale.ROOT) + "%";
+                predicates.add(builder.like(builder.lower(root.get(Product_.title)), pattern));
             }
             Long category = queryDto.getCategory();
             if (category != null) {
-                predicates.add(builder.equal(root.get("criteria").get("id"), category));
+                predicates.add(builder.equal(root.get(Product_.category), category));
             }
             BigDecimal fromPriceAmount = queryDto.getFromPriceAmount();
             if (fromPriceAmount != null) {
-                predicates.add(builder.ge(root.get("priceAmount"), fromPriceAmount));
+                predicates.add(builder.ge(root.get(Product_.priceAmount), fromPriceAmount));
             }
             BigDecimal toPriceAmount = queryDto.getToPriceAmount();
             if (toPriceAmount != null) {
-                predicates.add(builder.le(root.get("priceAmount"), toPriceAmount));
+                predicates.add(builder.le(root.get(Product_.priceAmount), toPriceAmount));
             }
             return builder.and(predicates.toArray(new Predicate[]{}));
         }, pageable);
