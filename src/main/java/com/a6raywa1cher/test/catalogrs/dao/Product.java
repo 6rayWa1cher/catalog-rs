@@ -35,7 +35,7 @@ public class Product {
     @Column(name = "image_url")
     private String imageUrl;
 
-    @ManyToOne(optional = false)
+    @ManyToOne
     @JoinColumn(name = "category_id")
     @ToString.Exclude
     private ProductCategory category;

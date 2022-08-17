@@ -1,17 +1,15 @@
 package com.a6raywa1cher.test.catalogrs.exception;
 
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
-
-public class FileStorageOperationException extends AppException {
+public class FileStorageOperationAppException extends AppException {
     private final String operationName;
     private final String objectName;
 
-    public FileStorageOperationException(String operationName, Exception cause) {
+    public FileStorageOperationAppException(String operationName, Exception cause) {
         this(operationName, null, cause);
     }
 
-    public FileStorageOperationException(String operationName, String objectName, Exception cause) {
-        super(INTERNAL_SERVER_ERROR.value(), cause);
+    public FileStorageOperationAppException(String operationName, String objectName, Exception cause) {
+        super(cause);
         this.operationName = operationName;
         this.objectName = objectName;
     }

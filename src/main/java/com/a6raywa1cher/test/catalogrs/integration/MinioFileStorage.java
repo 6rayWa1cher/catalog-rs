@@ -1,6 +1,6 @@
 package com.a6raywa1cher.test.catalogrs.integration;
 
-import com.a6raywa1cher.test.catalogrs.exception.FileStorageOperationException;
+import com.a6raywa1cher.test.catalogrs.exception.FileStorageOperationAppException;
 import io.minio.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,7 +65,7 @@ public class MinioFileStorage implements FileStorage {
             log.debug("File {}/{} has successfully uploaded to the storage", bucketName, objectId);
             return objectId;
         } catch (Exception e) {
-            throw new FileStorageOperationException("upload", e);
+            throw new FileStorageOperationAppException("upload", e);
         }
     }
 
@@ -88,7 +88,7 @@ public class MinioFileStorage implements FileStorage {
                     .build());
             log.debug("File {}/{} has deleted from the storage", bucketName, id);
         } catch (Exception e) {
-            throw new FileStorageOperationException("delete", id, e);
+            throw new FileStorageOperationAppException("delete", id, e);
         }
     }
 

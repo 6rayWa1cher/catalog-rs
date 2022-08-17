@@ -1,6 +1,7 @@
 package com.a6raywa1cher.test.catalogrs.dao.repo;
 
 import com.a6raywa1cher.test.catalogrs.dao.Product;
+import com.a6raywa1cher.test.catalogrs.dao.ProductStatus;
 import com.a6raywa1cher.test.catalogrs.dao.Product_;
 import com.a6raywa1cher.test.catalogrs.dto.ProductQueryDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,10 @@ public class ProductRepositoryImpl {
             BigDecimal toPriceAmount = queryDto.getToPriceAmount();
             if (toPriceAmount != null) {
                 predicates.add(builder.le(root.get(Product_.priceAmount), toPriceAmount));
+            }
+            ProductStatus status = queryDto.getStatus();
+            if (status != null) {
+                predicates.add(builder.equal(root.get(Product_.status), status));
             }
             return builder.and(predicates.toArray(new Predicate[]{}));
         }, pageable);

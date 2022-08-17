@@ -1,5 +1,6 @@
 package com.a6raywa1cher.test.catalogrs.dto;
 
+import com.a6raywa1cher.test.catalogrs.dao.ProductStatus;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -13,4 +14,6 @@ public class ProductQueryDto {
     private BigDecimal fromPriceAmount;
 
     private BigDecimal toPriceAmount;
+
+    private ProductStatus status;
 }

@@ -33,6 +33,7 @@ public class MapperHelper {
 
     @Named("ToPublicUrl")
     public String toPublicUrl(String id) {
+        if (id == null) return null;
         return fileStorage.getPublicUrl(id);
     }
 }

@@ -1,13 +1,15 @@
 package com.a6raywa1cher.test.catalogrs.service.impl;
 
+import com.a6raywa1cher.test.catalogrs.dao.Product;
 import com.a6raywa1cher.test.catalogrs.dao.ProductCategory;
+import com.a6raywa1cher.test.catalogrs.dao.ProductStatus;
 import com.a6raywa1cher.test.catalogrs.dao.repo.ProductCategoryRepository;
+import com.a6raywa1cher.test.catalogrs.dao.repo.ProductRepository;
 import com.a6raywa1cher.test.catalogrs.dto.ProductCategoryDto;
 import com.a6raywa1cher.test.catalogrs.exception.EntityNotFoundAppException;
 import com.a6raywa1cher.test.catalogrs.exception.UniqueConstraintViolationAppException;
 import com.a6raywa1cher.test.catalogrs.mapper.DtoMapper;
 import com.a6raywa1cher.test.catalogrs.service.ProductCategoryService;
-import com.a6raywa1cher.test.catalogrs.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,21 +19,22 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @Slf4j
 @Transactional
 public class ProductCategoryServiceImpl implements ProductCategoryService {
     private final ProductCategoryRepository repository;
+    private final ProductRepository productRepository;
     private final DtoMapper mapper;
-    private final ProductService productService;
 
     @Autowired
     public ProductCategoryServiceImpl(ProductCategoryRepository repository,
-                                      DtoMapper mapper, ProductService productService) {
+                                      ProductRepository productRepository, DtoMapper mapper) {
         this.repository = repository;
+        this.productRepository = productRepository;
         this.mapper = mapper;
-        this.productService = productService;
     }
 
     @Override
@@ -90,12 +93,19 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
 
     @Override
     public void delete(Long id) {
-        repository.findById(id)
-                .ifPresent((pc) -> {
-                    // TODO: invoke delete for all Products
-                    pc.getProducts().forEach(p -> productService.delete(p.getId()));
-                    repository.delete(pc);
-                });
+        Optional<ProductCategory> byId = repository.findById(id);
+        if (byId.isEmpty()) return;
+        ProductCategory category = byId.get();
+        unlinkProductsFromCategory(category);
+        repository.delete(category);
+    }
+
+    private void unlinkProductsFromCategory(ProductCategory category) {
+        for (Product p : category.getProducts()) {
+            p.setCategory(null);
+            p.setStatus(ProductStatus.INACTIVE);
+        }
+        productRepository.saveAll(category.getProducts());
     }
 
     private void assertProductCategoryTitleAvailable(String title) {

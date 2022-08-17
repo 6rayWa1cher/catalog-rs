@@ -88,7 +88,7 @@ public class ProductServiceImpl implements ProductService {
 
         mapper.copyNotNull(dto, product);
 
-        upsertProductIntoCategory(product, category);
+        if (category != null) upsertProductIntoCategory(product, category);
 
         Product saved = repository.save(product);
 
@@ -106,7 +106,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     private ProductCategory getCategoryById(Long id) {
-        Objects.requireNonNull(id, "id must be not null");
+        if (id == null) return null;
         return categoryRepository.findById(id).orElseThrow(() -> new EntityNotFoundAppException(id, ProductCategory.class));
     }
 
@@ -117,6 +117,7 @@ public class ProductServiceImpl implements ProductService {
 
     private void upsertProductIntoCategory(Product product, ProductCategory category) {
         removeProductFromCategory(product);
+        if (category == null) return;
         product.setCategory(category);
         category.getProducts().add(product);
     }
