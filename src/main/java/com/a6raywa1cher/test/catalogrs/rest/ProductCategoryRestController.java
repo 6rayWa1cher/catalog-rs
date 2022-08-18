@@ -16,7 +16,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/product/category")
+@RequestMapping("/api/products/category")
 public class ProductCategoryRestController {
     private final ProductCategoryService service;
     private final RestDtoMapper mapper;

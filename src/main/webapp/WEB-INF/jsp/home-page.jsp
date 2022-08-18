@@ -1,48 +1,114 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@taglib tagdir="/WEB-INF/tags" prefix="example" %>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page import="com.a6raywa1cher.test.catalogrs.dao.ProductStatus" %>
+<%@ taglib tagdir="/WEB-INF/tags" prefix="example" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <example:page title="Home page">
-    <%--    <c:forEach items="${products.content}" var="product">--%>
-    <%--        <aside>--%>
-    <%--            <c:if test="${product.imageUrl != null}">--%>
-    <%--                <img src="${product.imageUrl}" height="300" alt="${product.title} picture"/>--%>
-    <%--            </c:if>--%>
-    <%--            <h3>${product.title}</h3>--%>
-    <%--            <p>${product.priceAmount}RUB</p>--%>
-    <%--            <p>${product.status}</p>--%>
-    <%--        </aside>--%>
-    <%--    </c:forEach>--%>
     <section class="section">
         <div class="container content-wrapper">
             <h1 class="title">
                 Продукты
             </h1>
-            <div class="columns is-multiline">
-                <c:forEach items="${products.content}" var="product">
-                    <div class="column is-4-desktop is-3-widescreen is-half-tablet">
-                        <div class="card">
-                            <div class="card-image">
-                                <figure class="image">
-                                    <img src="<c:choose>
-                                        <c:when test="${product.imageUrl != null}">
-                                            ${product.imageUrl}
-                                        </c:when>
-                                        <c:otherwise>
-                                            <c:url value="/images/no_image_available.svg" />
-                                        </c:otherwise>
-                                    </c:choose>" alt="${product.title} picture"/>
-                                </figure>
-                            </div>
-                            <div class="card-content">
-                                <div class="content">
-                                    <h3>${product.title}</h3>
-                                    <p>${product.priceAmount}RUB</p>
-                                    <p>${product.status}</p>
+            <form:form method="get" modelAttribute="searchForm">
+                <div class="field is-grouped">
+                    <div class="control is-expanded">
+                        <form:input path="title" cssClass="input" placeholder="лампочка"/>
+                    </div>
+                    <div class="control">
+                        <input type="submit" class="button is-link" value="Найти"/>
+                    </div>
+                </div>
+                <div class="field is-horizontal">
+                    <div class="field-label is-normal">
+                        <label class="label">Цена</label>
+                    </div>
+                    <div class="field-body">
+                        <div class="field">
+                            <p class="control is-expanded">
+                                <form:input path="fromPriceAmount" cssClass="input" placeholder="От"/>
+                            </p>
+                        </div>
+                        <div class="field">
+                            <p class="control is-expanded">
+                                <form:input path="toPriceAmount" cssClass="input" placeholder="До"/>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="field is-horizontal">
+                    <div class="field-label is-normal">
+                        <form:label path="category" cssClass="label">Категория</form:label>
+                    </div>
+                    <div class="field-body">
+                        <div class="field is-narrow">
+                            <div class="control">
+                                <div class="select is-fullwidth">
+                                    <form:select path="category">
+                                        <form:option value="" label="Любая"/>
+                                        <form:options items="${categories}"/>
+                                    </form:select>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
+                <div class="field is-horizontal">
+                    <div class="field-label is-normal">
+                        <form:label path="category" cssClass="label">Статус</form:label>
+                    </div>
+                    <div class="field-body">
+                        <div class="field is-narrow">
+                            <div class="control">
+                                <div class="select is-fullwidth">
+                                    <form:select path="status">
+                                        <form:option value="" label="Любой"/>
+                                        <c:forEach items="${ProductStatus.values()}" var="status">
+                                            <form:option value="${status}">
+                                                <example:product-status status="${status}"/>
+                                            </form:option>
+                                        </c:forEach>
+                                    </form:select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form:form>
+        </div>
+    </section>
+    <section class="section">
+        <div class="container content-wrapper">
+            <div class="columns is-multiline">
+                <c:forEach items="${products.content}" var="product">
+                    <div class="column is-4-desktop is-3-widescreen is-half-tablet">
+                        <a href="${pageContext.request.contextPath}/products/${product.id}">
+                            <div class="card">
+                                <div class="card-image">
+                                    <figure class="image">
+                                        <img src="<c:choose>
+                                            <c:when test="${product.imageUrl != null}">
+                                                ${product.imageUrl}
+                                            </c:when>
+                                            <c:otherwise>
+                                                <c:url value="/images/no_image_available.svg" />
+                                            </c:otherwise>
+                                        </c:choose>" alt="${product.title} picture"/>
+                                    </figure>
+                                </div>
+                                <div class="card-content">
+                                    <div class="content">
+                                        <h3>${product.title}</h3>
+                                        <p>${product.priceAmount}RUB</p>
+                                        <p><example:product-status status="${product.status}"/></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
                 </c:forEach>
+            </div>
+            <div>
+                <example:page-navigation page="${products}"/>
             </div>
         </div>
     </section>

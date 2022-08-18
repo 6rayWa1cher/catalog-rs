@@ -18,6 +18,7 @@ public class ProductRestDto {
 
     @NotNull(groups = {OnCreate.class, OnUpdate.class})
     @PositiveOrZero
+    @Digits(integer = 15, fraction = 2)
     private BigDecimal priceAmount;
 
     @NotNull(groups = {OnCreate.class, OnUpdate.class})

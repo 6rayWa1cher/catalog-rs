@@ -1,13 +1,13 @@
-<%@tag description="page layout" %>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@attribute name="head" fragment="true" %>
-<%@attribute name="title" required="true" type="java.lang.String" %>
-<%@attribute name="script" required="false" type="java.lang.String" %>
-<%@attribute name="stylesheet" required="false" type="java.lang.String" %>
+<%@ tag description="page layout" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ attribute name="head" fragment="true" %>
+<%@ attribute name="title" required="true" type="java.lang.String" %>
+<%@ attribute name="script" required="false" type="java.lang.String" %>
+<%@ attribute name="stylesheet" required="false" type="java.lang.String" %>
 <!DOCTYPE html>
 <html>
 <head>
-    <title>${title} - Page Tag Example</title>
+    <title>${title} - Catalog RS</title>
     <link href="<c:url value="/style/bulma.min.css" />" rel="stylesheet" type="text/css"/>
     <style>
         <c:forTokens var="item" items="${stylesheet}" delims=",">
@@ -17,6 +17,7 @@
     </style>
 
     <script type="text/javascript" src="<c:url value="/script/jquery-3.6.0.min.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/script/script.js"/>"></script>
     <c:forTokens var="item" items="${script}" delims=",">
         <script type="text/javascript" src="<c:url value="/script"/>${item}">
         </script>
@@ -28,7 +29,7 @@
 <body>
 <nav class="navbar" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
-        <a class="navbar-item" href="/">
+        <a class="navbar-item" href="${pageContext.request.contextPath}/">
             Catalog RS
         </a>
 
@@ -89,6 +90,5 @@
 <div class="content">
     <jsp:doBody/>
 </div>
-<script type="text/javascript" src="<c:url value="/script/script.js"/>"></script>
 </body>
 </html>

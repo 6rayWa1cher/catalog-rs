@@ -22,7 +22,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 @RestController
-@RequestMapping("/api/product")
+@RequestMapping("/api/products")
 public class ProductRestController {
     private final ProductService service;
     private final RestDtoMapper mapper;
