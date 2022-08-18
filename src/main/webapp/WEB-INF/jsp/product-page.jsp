@@ -2,6 +2,8 @@
 <%@ page import="java.time.format.DateTimeFormatter" %>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="custom" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<% pageContext.setAttribute("newLineChar", "\n"); %>
 <custom:page title="${product.title}" stylesheet="/product-page.css">
     <section class="section">
         <div class="container content-wrapper">
@@ -64,7 +66,7 @@
                     <c:choose>
                         <c:when test="${product.description != null}">
                             <p>
-                                    ${product.description}
+                                    ${fn:replace(product.description, newLineChar, '<br/>')}
                             </p>
                         </c:when>
                         <c:otherwise>
