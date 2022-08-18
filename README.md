@@ -9,7 +9,7 @@ Install docker and run the following commands in your terminal:
 ```sh
 git clone https://github.com/6rayWa1cher/catalog-rs/
 cd catalog-rs
-docker compose up --build
+docker compose --profile infra --profile backend up -d
 ```
 
 The application is available on [http://localhost:8080](http://localhost:8080).

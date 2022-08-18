@@ -6,7 +6,6 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
   servlet:
     multipart:
       max-file-size: 4MB
@@ -19,8 +18,8 @@ storage:
   minio:
     endpoint: http://localhost:9000
     bucket: catalog-rs-bucket
-    access-key: minio-access-key
-    secret-key: minio-secret-key
+    access-key: minio-root-user
+    secret-key: minio-root-password
     public-endpoint: http://localhost:9000
 app:
   version: 1.0

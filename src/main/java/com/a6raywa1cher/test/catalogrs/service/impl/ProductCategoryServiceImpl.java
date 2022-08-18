@@ -56,14 +56,14 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     @Override
     public ProductCategoryDto create(ProductCategoryDto dto) {
         ProductCategory productCategory = new ProductCategory();
-        throw new RuntimeException("test");
-//        mapper.copyAll(dto, productCategory);
-//
-//        assertProductCategoryTitleAvailable(productCategory.getTitle());
-//
-//        ProductCategory saved = repository.save(productCategory);
-//
-//        return mapper.map(saved);
+
+        mapper.copyAll(dto, productCategory);
+
+        assertProductCategoryTitleAvailable(productCategory.getTitle());
+
+        ProductCategory saved = repository.save(productCategory);
+
+        return mapper.map(saved);
     }
 
     @Override

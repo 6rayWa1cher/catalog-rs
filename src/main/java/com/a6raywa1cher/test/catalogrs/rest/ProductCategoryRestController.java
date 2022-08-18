@@ -49,7 +49,6 @@ public class ProductCategoryRestController {
     @Operation(summary = "Create a product category")
     @ApiResponse(responseCode = "200", description = "successful operation",
             content = @Content(mediaType = "application/json"))
-
     public ProductCategoryDto create(@RequestBody @Validated(OnCreate.class) ProductCategoryRequestDto dto) {
         return service.create(mapper.map(dto));
     }

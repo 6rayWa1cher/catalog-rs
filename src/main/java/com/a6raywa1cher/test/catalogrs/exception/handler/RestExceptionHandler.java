@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.impl.SizeLimitExceededException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -27,6 +28,7 @@ import static org.springframework.http.HttpStatus.*;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @RestControllerAdvice
+@Slf4j
 public class RestExceptionHandler {
     @ExceptionHandler(EntityNotFoundAppException.class)
     @ApiResponse(responseCode = "404", description = "not found",
@@ -159,6 +161,7 @@ public class RestExceptionHandler {
     public ResponseEntity<ApiError> handleUncaughtException(Exception exception) {
         ApiError apiError = new ApiError(INTERNAL_SERVER_ERROR);
         apiError.setMessage("Internal server error");
+        log.error("Exception caught", exception);
         return buildResponseEntity(apiError);
     }
 
