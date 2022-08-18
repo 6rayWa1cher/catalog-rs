@@ -46,7 +46,7 @@ public class ProductCategoryPageController {
     @GetMapping("/create")
     public String createCategoryForm(Model model, HttpServletRequest request) {
         model.addAttribute("title", "Создание категории");
-        model.addAttribute("actionUrl", request.getRequestURL().toString() + ".do");
+        model.addAttribute("actionUrl", request.getRequestURI() + ".do");
         return "category-form";
     }
 
@@ -56,7 +56,7 @@ public class ProductCategoryPageController {
             BindingResult bindingResult, Model model, HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("title", "Создание категории");
-            model.addAttribute("actionUrl", request.getRequestURL().toString());
+            model.addAttribute("actionUrl", request.getRequestURI());
             return "category-form";
         }
         service.create(mapper.map(dto));
@@ -69,7 +69,7 @@ public class ProductCategoryPageController {
         model.addAttribute("title", "Изменение категории");
         model.addAttribute("category", dto);
         model.addAttribute("categoryId", id);
-        model.addAttribute("actionUrl", request.getRequestURL().toString() + ".do");
+        model.addAttribute("actionUrl", request.getRequestURI() + ".do");
         return "category-form";
     }
 
@@ -80,7 +80,7 @@ public class ProductCategoryPageController {
         if (bindingResult.hasErrors()) {
             model.addAttribute("title", "Изменение категории");
             model.addAttribute("categoryId", id);
-            model.addAttribute("actionUrl", request.getRequestURL().toString());
+            model.addAttribute("actionUrl", request.getRequestURI());
             return "category-form";
         }
         service.update(id, mapper.map(dto));

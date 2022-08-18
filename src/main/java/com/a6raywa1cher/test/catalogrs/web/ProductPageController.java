@@ -61,7 +61,7 @@ public class ProductPageController {
     @GetMapping("/create")
     public String createProductPage(Model model, HttpServletRequest request) {
         model.addAttribute("title", "Создание продукта");
-        model.addAttribute("actionUrl", request.getRequestURL() + ".do");
+        model.addAttribute("actionUrl", request.getRequestURI() + ".do");
         return "product-form";
     }
 
@@ -71,7 +71,7 @@ public class ProductPageController {
                                       BindingResult bindingResult, Model model, HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("title", "Создание продукта");
-            model.addAttribute("actionUrl", request.getRequestURL());
+            model.addAttribute("actionUrl", request.getRequestURI());
             return "product-form";
         }
         ProductDto productDto = service.create(mapper.map(dto));
@@ -85,7 +85,7 @@ public class ProductPageController {
     public String editProductPage(@PathVariable long id, Model model, HttpServletRequest request) {
         ProductDto productDto = service.getById(id);
         model.addAttribute("title", "Изменение продукта");
-        model.addAttribute("actionUrl", request.getRequestURL() + ".do");
+        model.addAttribute("actionUrl", request.getRequestURI() + ".do");
         model.addAttribute("product", mapper.map(productDto));
         model.addAttribute("productId", id);
         return "product-form";
@@ -96,7 +96,7 @@ public class ProductPageController {
                                     BindingResult bindingResult, Model model, HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("title", "Изменение продукта");
-            model.addAttribute("actionUrl", request.getRequestURL());
+            model.addAttribute("actionUrl", request.getRequestURI());
             model.addAttribute("product", dto);
             model.addAttribute("productId", id);
             return "product-form";
