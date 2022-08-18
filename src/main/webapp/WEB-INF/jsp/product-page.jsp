@@ -1,8 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.time.format.DateTimeFormatter" %>
-<%@ taglib tagdir="/WEB-INF/tags" prefix="example" %>
+<%@ taglib tagdir="/WEB-INF/tags" prefix="custom" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<example:page title="${product.title}" stylesheet="/product-page.css">
+<custom:page title="${product.title}" stylesheet="/product-page.css">
     <section class="section">
         <div class="container content-wrapper">
             <div class="level">
@@ -46,7 +46,7 @@
                         <tr>
                             <th>Статус</th>
                             <td>
-                                <example:product-status status="${product.status}"/>
+                                <custom:product-status status="${product.status}"/>
                             </td>
                         </tr>
                         <tr>
@@ -72,4 +72,4 @@
             </div>
         </div>
     </section>
-</example:page>
+</custom:page>

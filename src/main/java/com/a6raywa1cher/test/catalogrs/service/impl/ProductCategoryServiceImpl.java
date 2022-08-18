@@ -127,4 +127,9 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
                 .map(mapper::map)
                 .toList();
     }
+
+    @Override
+    public Optional<ProductCategoryDto> findByTitle(String title) {
+        return repository.findByTitle(title).map(mapper::map);
+    }
 }

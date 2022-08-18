@@ -8,6 +8,8 @@ import com.a6raywa1cher.test.catalogrs.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,7 +31,7 @@ public class HomePageController {
     }
 
     @GetMapping("")
-    public String home(Model model, ProductQueryDto queryDto, Pageable pageable) {
+    public String home(Model model, ProductQueryDto queryDto, @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         Page<ShortProductDto> page = productService.getPageByFilter(queryDto, pageable);
         model.addAttribute("products", page);
         Map<Long, String> categoriesMap = productCategoryService.getAll().stream()

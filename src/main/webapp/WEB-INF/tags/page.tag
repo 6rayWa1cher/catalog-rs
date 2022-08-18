@@ -1,4 +1,4 @@
-<%@ tag description="page layout" %>
+<%@ tag description="page layout" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ attribute name="head" fragment="true" %>
 <%@ attribute name="title" required="true" type="java.lang.String" %>
@@ -42,12 +42,12 @@
 
     <div id="navbarBasicExample" class="navbar-menu">
         <div class="navbar-start">
-            <a class="navbar-item">
-                Home
+            <a class="navbar-item" href="<c:url value="/" />">
+                Продукты
             </a>
 
-            <a class="navbar-item">
-                Documentation
+            <a class="navbar-item" href="<c:url value="/products/categories" />">
+                Категории
             </a>
 
             <div class="navbar-item has-dropdown is-hoverable">

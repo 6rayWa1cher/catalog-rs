@@ -1,9 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ page import="com.a6raywa1cher.test.catalogrs.dao.ProductStatus" %>
-<%@ taglib tagdir="/WEB-INF/tags" prefix="example" %>
+<%@ taglib tagdir="/WEB-INF/tags" prefix="custom" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<example:page title="Home page">
+<custom:page title="Домашняя страница" stylesheet="/home-page.css">
     <section class="section">
         <div class="container content-wrapper">
             <h1 class="title">
@@ -64,7 +64,7 @@
                                         <form:option value="" label="Любой"/>
                                         <c:forEach items="${ProductStatus.values()}" var="status">
                                             <form:option value="${status}">
-                                                <example:product-status status="${status}"/>
+                                                <custom:product-status status="${status}"/>
                                             </form:option>
                                         </c:forEach>
                                     </form:select>
@@ -99,7 +99,7 @@
                                     <div class="content">
                                         <h3>${product.title}</h3>
                                         <p>${product.priceAmount}RUB</p>
-                                        <p><example:product-status status="${product.status}"/></p>
+                                        <p><custom:product-status status="${product.status}"/></p>
                                     </div>
                                 </div>
                             </div>
@@ -108,8 +108,8 @@
                 </c:forEach>
             </div>
             <div>
-                <example:page-navigation page="${products}"/>
+                <custom:page-navigation page="${products}"/>
             </div>
         </div>
     </section>
-</example:page>
+</custom:page>
