@@ -42,7 +42,7 @@ public class MinioFileStorage implements FileStorage {
                     .build());
             minioClient.setBucketPolicy(SetBucketPolicyArgs.builder()
                     .bucket(bucketName)
-                    .config("public")
+                    .config("public") // make files visible for an anonymous viewer
                     .build());
         }
         log.info("MinioFileStorage buckets has been initialized");
@@ -69,6 +69,9 @@ public class MinioFileStorage implements FileStorage {
         }
     }
 
+    // This step is complicated due to minio's limitations: too many files in one directory
+    // will drastically slow down performance. Therefore, this method separates files into subdirectories.
+    // Total number of subdirectories is 256 per folder.
     private String generatePath(String folder, String suggestedFileName) {
         int randomByte = random.nextInt(0xFF + 1); // we want two symbols for a subfolder name
         String subfolder = Integer.toHexString(randomByte);

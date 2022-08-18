@@ -1,4 +1,4 @@
-package com.a6raywa1cher.test.catalogrs.component;
+package com.a6raywa1cher.test.catalogrs.exception.handler;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

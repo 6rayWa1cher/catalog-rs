@@ -1,8 +1,12 @@
-package com.a6raywa1cher.test.catalogrs.component;
+package com.a6raywa1cher.test.catalogrs.exception.handler;
 
 import com.a6raywa1cher.test.catalogrs.exception.EntityNotFoundAppException;
 import com.a6raywa1cher.test.catalogrs.exception.FileStorageOperationAppException;
 import com.a6raywa1cher.test.catalogrs.exception.UniqueConstraintViolationAppException;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.apache.tomcat.util.http.fileupload.impl.SizeLimitExceededException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -25,6 +29,18 @@ import static org.springframework.http.HttpStatus.*;
 @RestControllerAdvice
 public class RestExceptionHandler {
     @ExceptionHandler(EntityNotFoundAppException.class)
+    @ApiResponse(responseCode = "404", description = "not found",
+            content = @Content(mediaType = "application/json", examples = @ExampleObject("""
+                    {
+                      "status": "NOT_FOUND",
+                      "timestamp": "2022-08-18T19:55:39.1411325+03:00",
+                      "message": "Entity ProductCategory{id=2} isn't found",
+                      "debugMessage": null,
+                      "subErrors": null
+                    }
+                    """),
+                    schema = @Schema(implementation = ApiError.class)
+            ))
     public ResponseEntity<ApiError> handleEntityNotFound(
             EntityNotFoundAppException exception
     ) {
@@ -48,6 +64,17 @@ public class RestExceptionHandler {
     }
 
     @ExceptionHandler(UniqueConstraintViolationAppException.class)
+    @ApiResponse(responseCode = "409", description = "conflict: unique constraint violation",
+            content = @Content(mediaType = "application/json", examples = @ExampleObject("""
+                    {
+                      "status": "CONFLICT",
+                      "timestamp": "2022-08-18T20:16:19.8937104+03:00",
+                      "message": "Unique constraint violation: {title = string}",
+                      "debugMessage": null,
+                      "subErrors": null
+                    }
+                    """),
+                    schema = @Schema(implementation = ApiError.class)))
     public ResponseEntity<ApiError> handleUniqueConstraintViolation(UniqueConstraintViolationAppException exception) {
         ApiError apiError = new ApiError(CONFLICT);
         Map<String, Object> violations = exception.getViolations();
@@ -56,6 +83,23 @@ public class RestExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ApiResponse(responseCode = "400", description = "validation failure",
+            content = @Content(mediaType = "application/json", examples = @ExampleObject("""
+                    {
+                      "status": "BAD_REQUEST",
+                      "timestamp": "2022-08-18T20:13:37.7563971+03:00",
+                      "message": "Validation failed for fields [title]",
+                      "debugMessage": "...",
+                      "subErrors": [
+                        {
+                          "object": "productCategoryRequestDto",
+                          "field": "title",
+                          "rejectedValue": null,
+                          "message": "must not be blank"
+                        }
+                      ]
+                    }"""),
+                    schema = @Schema(implementation = ApiError.class)))
     public ResponseEntity<ApiError> handleMethodArgumentNotValid(MethodArgumentNotValidException exception) {
         ApiError apiError = new ApiError(BAD_REQUEST);
         String failedFields = exception.getFieldErrors().stream()
@@ -68,6 +112,17 @@ public class RestExceptionHandler {
     }
 
     @ExceptionHandler(MaxUploadSizeExceededException.class)
+    @ApiResponse(responseCode = "413", description = "file content or json object is too large",
+            content = @Content(mediaType = "application/json", examples = @ExampleObject("""
+                    {
+                      "status": "PAYLOAD_TOO_LARGE",
+                      "timestamp": "2022-08-18T20:42:22.1715387+03:00",
+                      "message": "Configured maximum size for a payload exceeded (518241333 > 4194304)",
+                      "debugMessage": null,
+                      "subErrors": null
+                    }
+                    """),
+                    schema = @Schema(implementation = ApiError.class)))
     public ResponseEntity<ApiError> handleSizeLimitExceeded(MaxUploadSizeExceededException exception) {
         ApiError apiError = new ApiError(PAYLOAD_TOO_LARGE);
         Throwable rootCause = exception.getRootCause();
@@ -90,10 +145,20 @@ public class RestExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
+    @ApiResponse(responseCode = "500", description = "unknown error",
+            content = @Content(mediaType = "application/json", examples = @ExampleObject("""
+                    {
+                      "status": "INTERNAL_SERVER_ERROR",
+                      "timestamp": "2022-08-18T20:37:55.3449157+03:00",
+                      "message": "Internal server error",
+                      "debugMessage": null,
+                      "subErrors": null
+                    }
+                    """),
+                    schema = @Schema(implementation = ApiError.class)))
     public ResponseEntity<ApiError> handleUncaughtException(Exception exception) {
         ApiError apiError = new ApiError(INTERNAL_SERVER_ERROR);
-        apiError.setMessage("Internal server error: %s".formatted(exception.getClass().getSimpleName()));
-        apiError.setDebugMessage(exception.getMessage());
+        apiError.setMessage("Internal server error");
         return buildResponseEntity(apiError);
     }
 

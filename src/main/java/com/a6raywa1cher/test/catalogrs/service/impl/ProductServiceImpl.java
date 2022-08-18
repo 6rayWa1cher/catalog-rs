@@ -123,8 +123,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     private void removeProductFromCategory(Product product) {
-        if (product.getCategory() == null) return;
-        product.getCategory().getProducts().remove(product);
+        ProductCategory category = product.getCategory();
+        if (category == null) return;
+        category.getProducts().remove(product);
         product.setCategory(null);
     }
 

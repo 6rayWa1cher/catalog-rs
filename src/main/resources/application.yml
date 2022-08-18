@@ -22,3 +22,10 @@ storage:
     access-key: minio-access-key
     secret-key: minio-secret-key
     public-endpoint: http://localhost:9000
+app:
+  version: 1.0
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: alpha
+    tagsSorter: alpha
