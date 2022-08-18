@@ -1,12 +1,12 @@
 package com.a6raywa1cher.test.catalogrs.rest;
 
 import com.a6raywa1cher.test.catalogrs.dto.ProductCategoryDto;
-import com.a6raywa1cher.test.catalogrs.mapper.RestDtoMapper;
-import com.a6raywa1cher.test.catalogrs.rest.dto.ProductCategoryRestDto;
-import com.a6raywa1cher.test.catalogrs.rest.dto.group.OnCreate;
-import com.a6raywa1cher.test.catalogrs.rest.dto.group.OnPatch;
-import com.a6raywa1cher.test.catalogrs.rest.dto.group.OnUpdate;
+import com.a6raywa1cher.test.catalogrs.dto.request.ProductCategoryRequestDto;
+import com.a6raywa1cher.test.catalogrs.mapper.RequestDtoMapper;
 import com.a6raywa1cher.test.catalogrs.service.ProductCategoryService;
+import com.a6raywa1cher.test.catalogrs.validation.group.OnCreate;
+import com.a6raywa1cher.test.catalogrs.validation.group.OnPatch;
+import com.a6raywa1cher.test.catalogrs.validation.group.OnUpdate;
 import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,10 +19,10 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/products/category")
 public class ProductCategoryRestController {
     private final ProductCategoryService service;
-    private final RestDtoMapper mapper;
+    private final RequestDtoMapper mapper;
 
     @Autowired
-    public ProductCategoryRestController(ProductCategoryService service, RestDtoMapper mapper) {
+    public ProductCategoryRestController(ProductCategoryService service, RequestDtoMapper mapper) {
         this.service = service;
         this.mapper = mapper;
     }
@@ -39,17 +39,17 @@ public class ProductCategoryRestController {
 
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
-    public ProductCategoryDto create(@RequestBody @Validated(OnCreate.class) ProductCategoryRestDto dto) {
+    public ProductCategoryDto create(@RequestBody @Validated(OnCreate.class) ProductCategoryRequestDto dto) {
         return service.create(mapper.map(dto));
     }
 
     @PutMapping("/{id}")
-    public ProductCategoryDto update(@PathVariable long id, @RequestBody @Validated(OnUpdate.class) ProductCategoryRestDto dto) {
+    public ProductCategoryDto update(@PathVariable long id, @RequestBody @Validated(OnUpdate.class) ProductCategoryRequestDto dto) {
         return service.update(id, mapper.map(dto));
     }
 
     @PatchMapping("/{id}")
-    public ProductCategoryDto patch(@PathVariable long id, @RequestBody @Validated(OnPatch.class) ProductCategoryRestDto dto) {
+    public ProductCategoryDto patch(@PathVariable long id, @RequestBody @Validated(OnPatch.class) ProductCategoryRequestDto dto) {
         return service.patch(id, mapper.map(dto));
     }
 

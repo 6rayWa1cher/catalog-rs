@@ -1,16 +1,16 @@
-package com.a6raywa1cher.test.catalogrs.rest.dto;
+package com.a6raywa1cher.test.catalogrs.dto.request;
 
 import com.a6raywa1cher.test.catalogrs.dao.ProductStatus;
-import com.a6raywa1cher.test.catalogrs.rest.dto.group.OnAny;
-import com.a6raywa1cher.test.catalogrs.rest.dto.group.OnCreate;
-import com.a6raywa1cher.test.catalogrs.rest.dto.group.OnUpdate;
+import com.a6raywa1cher.test.catalogrs.validation.group.OnAny;
+import com.a6raywa1cher.test.catalogrs.validation.group.OnCreate;
+import com.a6raywa1cher.test.catalogrs.validation.group.OnUpdate;
 import lombok.Data;
 
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
 
 @Data
-public class ProductRestDto {
+public class ProductRequestDto {
     @NotBlank(groups = {OnCreate.class, OnUpdate.class})
     @Size(max = 255, groups = OnAny.class)
     private String title;

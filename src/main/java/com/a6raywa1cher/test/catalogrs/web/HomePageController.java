@@ -13,6 +13,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Map;
@@ -34,10 +35,13 @@ public class HomePageController {
     public String home(Model model, ProductQueryDto queryDto, @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         Page<ShortProductDto> page = productService.getPageByFilter(queryDto, pageable);
         model.addAttribute("products", page);
-        Map<Long, String> categoriesMap = productCategoryService.getAll().stream()
-                .collect(Collectors.toMap(ProductCategoryDto::getId, ProductCategoryDto::getTitle));
-        model.addAttribute("categories", categoriesMap);
         model.addAttribute("searchForm", queryDto);
         return "home-page";
+    }
+
+    @ModelAttribute("categories")
+    public Map<Long, String> getCategories() {
+        return productCategoryService.getAll().stream()
+                .collect(Collectors.toMap(ProductCategoryDto::getId, ProductCategoryDto::getTitle));
     }
 }

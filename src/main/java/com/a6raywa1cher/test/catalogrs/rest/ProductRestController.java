@@ -3,12 +3,12 @@ package com.a6raywa1cher.test.catalogrs.rest;
 import com.a6raywa1cher.test.catalogrs.dto.ProductDto;
 import com.a6raywa1cher.test.catalogrs.dto.ProductQueryDto;
 import com.a6raywa1cher.test.catalogrs.dto.ShortProductDto;
-import com.a6raywa1cher.test.catalogrs.mapper.RestDtoMapper;
-import com.a6raywa1cher.test.catalogrs.rest.dto.ProductRestDto;
-import com.a6raywa1cher.test.catalogrs.rest.dto.group.OnCreate;
-import com.a6raywa1cher.test.catalogrs.rest.dto.group.OnPatch;
-import com.a6raywa1cher.test.catalogrs.rest.dto.group.OnUpdate;
+import com.a6raywa1cher.test.catalogrs.dto.request.ProductRequestDto;
+import com.a6raywa1cher.test.catalogrs.mapper.RequestDtoMapper;
 import com.a6raywa1cher.test.catalogrs.service.ProductService;
+import com.a6raywa1cher.test.catalogrs.validation.group.OnCreate;
+import com.a6raywa1cher.test.catalogrs.validation.group.OnPatch;
+import com.a6raywa1cher.test.catalogrs.validation.group.OnUpdate;
 import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -25,10 +25,10 @@ import javax.validation.constraints.NotNull;
 @RequestMapping("/api/products")
 public class ProductRestController {
     private final ProductService service;
-    private final RestDtoMapper mapper;
+    private final RequestDtoMapper mapper;
 
     @Autowired
-    public ProductRestController(ProductService service, RestDtoMapper mapper) {
+    public ProductRestController(ProductService service, RequestDtoMapper mapper) {
         this.service = service;
         this.mapper = mapper;
     }
@@ -52,17 +52,17 @@ public class ProductRestController {
 
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
-    public ProductDto create(@RequestBody @Validated(OnCreate.class) ProductRestDto dto) {
+    public ProductDto create(@RequestBody @Validated(OnCreate.class) ProductRequestDto dto) {
         return service.create(mapper.map(dto));
     }
 
     @PutMapping("/{id}")
-    public ProductDto update(@PathVariable long id, @RequestBody @Validated(OnUpdate.class) ProductRestDto dto) {
+    public ProductDto update(@PathVariable long id, @RequestBody @Validated(OnUpdate.class) ProductRequestDto dto) {
         return service.update(id, mapper.map(dto));
     }
 
     @PatchMapping("/{id}")
-    public ProductDto patch(@PathVariable long id, @RequestBody @Validated(OnPatch.class) ProductRestDto dto) {
+    public ProductDto patch(@PathVariable long id, @RequestBody @Validated(OnPatch.class) ProductRequestDto dto) {
         return service.patch(id, mapper.map(dto));
     }
 

@@ -6,9 +6,20 @@
 <custom:page title="Домашняя страница" stylesheet="/home-page.css">
     <section class="section">
         <div class="container content-wrapper">
-            <h1 class="title">
-                Продукты
-            </h1>
+            <div class="level">
+                <div class="level-left">
+                    <div class="level-item">
+                        <h1 class="title">
+                            Продукты
+                        </h1>
+                    </div>
+                </div>
+                <div class="level-right">
+                    <div class="level-item">
+                        <a class="button is-link is-outlined" href="<c:url value="/products/create"/>">Создать</a>
+                    </div>
+                </div>
+            </div>
             <form:form method="get" modelAttribute="searchForm">
                 <div class="field is-grouped">
                     <div class="control is-expanded">
@@ -54,7 +65,7 @@
                 </div>
                 <div class="field is-horizontal">
                     <div class="field-label is-normal">
-                        <form:label path="category" cssClass="label">Статус</form:label>
+                        <form:label path="status" cssClass="label">Статус</form:label>
                     </div>
                     <div class="field-body">
                         <div class="field is-narrow">

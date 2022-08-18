@@ -2,7 +2,7 @@
 <%@ taglib tagdir="/WEB-INF/tags" prefix="custom" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<custom:page title="${title}" stylesheet="/home-page.css">
+<custom:page title="${title}">
     <div class="section">
         <div class="container">
             <div class="level">
@@ -24,7 +24,7 @@
                     </div>
                 </c:if>
             </div>
-            <form:form method="post" action="${requestScope['javax.servlet.forward.request_uri']}.do"
+            <form:form method="post" action="${actionUrl}"
                        modelAttribute="category">
                 <div class="field">
                     <form:label path="title" cssClass="label">Название</form:label>

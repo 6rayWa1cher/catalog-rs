@@ -19,6 +19,9 @@
                                 ${product.priceAmount}RUB
                         </h2>
                     </div>
+                    <div class="level-item">
+                        <a class="button is-link is-outlined" href="<c:url value="/products/${product.id}/edit"/>">Изменить</a>
+                    </div>
                 </div>
             </div>
             <div class="columns">
